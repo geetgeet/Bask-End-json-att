@@ -1,5 +1,6 @@
 import sqlite3
 from flask import Flask, render_template, request, jsonify
+from flask_cors import CORS
 
 
 def init_sqlite_db():
@@ -10,6 +11,8 @@ def init_sqlite_db():
     conn.close()
 init_sqlite_db()
 app = Flask(__name__)
+CORS(app)
+
 @app.route('/')
 @app.route('/add-product/')
 def enter_new_student():
@@ -66,8 +69,7 @@ def show_records():
         print("There was an error fetching results from the database: " + str(e))
     finally:
         con.close()
-        d=records
-        return jsonify(d)
+        return jsonify(records)
 
 
 
