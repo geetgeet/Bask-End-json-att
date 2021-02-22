@@ -16,14 +16,13 @@
         <th>Edit</th>
         {% for record in records %}
             <tr>
-                <td>{{ record[0] }}</td>
+                <td>{{ record[0] }}</td><!--Id-->
                 <td>{{ record[1] }}</td>
                 <td>{{ record[2] }}</td>
                 <td>{{ record[3] }}</td>
                 <td>{{ record[4] }}</td>
                 <td><a href="/delete-item/{{ record[0] }}">Delete</a> </td>
                 <td><a href="/edit-item/{{ record[0] }}">Edit</a></td>
-
 
             </tr>
         {% endfor %}
