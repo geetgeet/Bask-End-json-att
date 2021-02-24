@@ -21,6 +21,8 @@ CORS(app)
 @app.route('/add-product/')
 def enter_new_student():
     return render_template('new-product.html')
+
+
 @app.route('/add-new-record/', methods=['POST'])
 def add_new_record():
     if request.method == "POST":
@@ -40,24 +42,10 @@ def add_new_record():
             msg = "Error occurred in insert operation: " + str(e)
         finally:
             con.close()
-            return render_template('result.html', msg=msg)
+            return jsonify(msg)
 
 
 
-'''@app.route('/show-records-table/', methods=["GET"])
-def show_table():
-    records = []
-    try:
-        with sqlite3.connect('database.db') as con:
-            cur = con.cursor()
-            cur.execute("SELECT * FROM Items")
-            records = cur.fetchall()
-    except Exception as e:
-        con.rollback()
-        print("There was an error fetching results from the database: " + str(e))
-    finally:
-        con.close()
-        return render_template('records.html')'''
 
 
 
@@ -87,6 +75,28 @@ def show_records():
         con.close()
         return jsonify(records)
 
+@app.route('/show-records-table/', methods=["GET"])
+def show_records_table():
+    records = []
+    try:
+
+        with sqlite3.connect('database.db') as con:
+            con.row_factory=dict_factory
+            cur = con.cursor()
+            cur.execute("SELECT * FROM Items")
+            records = cur.fetchall()
+        ''' for row in records:
+                print(row)
+
+            for i in row:
+                print(i)
+            print((records))'''
+    except Exception as e:
+        con.rollback()
+        print("There was an error fetching results from the database: " + str(e))
+    finally:
+        con.close()
+        return
 
 '''
 
