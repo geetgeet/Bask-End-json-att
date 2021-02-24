@@ -2,7 +2,11 @@ import sqlite3
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 
-
+def dict_factory(cursor,row):
+    d={}
+    for idx,col in enumerate(cursor.description):
+        d[col[0]]=row[idx]
+    return d
 def init_sqlite_db():
     conn = sqlite3.connect('database.db')
     print("Opened database successfully")
@@ -26,9 +30,6 @@ def add_new_record():
             price = request.form['price']
             brand = request.form['brand']
             picture = request.form['picture']
-
-
-
             with sqlite3.connect('database.db') as con:
                 cur = con.cursor()
                 cur.execute("INSERT INTO Items (product_name, price, brand, picture) VALUES (?, ?, ?, ?)", (product_name, price, brand, picture))
@@ -40,8 +41,10 @@ def add_new_record():
         finally:
             con.close()
             return render_template('result.html', msg=msg)
-@app.route('/show-records-table/', methods=["GET"])
 
+
+
+'''@app.route('/show-records-table/', methods=["GET"])
 def show_table():
     records = []
     try:
@@ -54,16 +57,29 @@ def show_table():
         print("There was an error fetching results from the database: " + str(e))
     finally:
         con.close()
-        return render_template('records.html')
+        return render_template('records.html')'''
+
+
+
+
+
 
 @app.route('/show-records/', methods=["GET"])
 def show_records():
     records = []
     try:
+
         with sqlite3.connect('database.db') as con:
+            con.row_factory=dict_factory
             cur = con.cursor()
             cur.execute("SELECT * FROM Items")
             records = cur.fetchall()
+        ''' for row in records:
+                print(row)
+
+            for i in row:
+                print(i)
+            print((records))'''
     except Exception as e:
         con.rollback()
         print("There was an error fetching results from the database: " + str(e))
@@ -72,11 +88,7 @@ def show_records():
         return jsonify(records)
 
 
-
-
-
-
-
+'''
 
 @app.route('/edit-item/<int:product_id>/',methods=['GET'])
 def edit_product(product_id):
@@ -97,7 +109,7 @@ def edit_product(product_id):
             con.close()
             return render_template('delete-success.html', msg=msg)
 
-
+'''
 @app.route('/delete-item/<int:product_id>/', methods=["GET"])
 def delete_product(product_id):
 
