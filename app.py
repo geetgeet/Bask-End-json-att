@@ -143,8 +143,8 @@ def show_records_table():
 
 @app.route('/edit-item/<int:product_id>/',methods=['GET'])
 def edit_product(product_id):
-    return render_template('edit.html')
-    msg="Edited"
+    # return render_template('edit.html')
+    # msg="Edited"
     try:
 
         with sqlite3.connect('database.db') as con:
