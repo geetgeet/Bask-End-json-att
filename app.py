@@ -46,7 +46,6 @@ CORS(app)
 
 
 @app.route('/')
-
 @app.route('/add-new-record/', methods=['POST'])
 def add_new_record():
     if request.method == "POST":
@@ -67,32 +66,52 @@ def add_new_record():
         finally:
             con.close()
             return jsonify(msg)
-@app.route('/login/',method=["GET"])
-def check():
-    all_logs={"SELECT * FROM Admin WHERE username = ? and password = ?"}
-    myuser=request.form['username']
-    password=request.form['password']
-    if (myuser, password)in all_logs:
-        return ("HI")
+
+#
+# @app.route('/login/',methods=["GET"])
 # def login():
-#     logs=[]
+#     if request.method == "GET":
+#
+#         msg=None
 #     try:
-#         username=request.form['username']
+#         myuser=request.form['username']
 #         password=request.form['password']
 #         with sqlite3.connect('database.db') as con:
-#             cur=con.cursor()
-#             adminT=("SELECT * FROM Admin WHERE username = ? and password = ?")
-#             cur.execute(adminT,[(username),(password)])
 #             cur = con.cursor()
-#             con.row_factory=dict_factory
+#             all_logs=("SELECT * FROM Admin WHERE username = ? and password = ?")
+#             cur.execute(all_logs,(myuser,password))
 #             cur.fetchall()
-#
+#             con.commit()
+#             msg="logged in"
 #     except Exception as e:
 #         con.rollback()
-#         print("There was an error fetching results from the database: " + str(e))
+#         msg= "Error occurred in insert operation: " + str(e)
 #     finally:
 #         con.close()
-#         return jsonify(logs)
+#         return jsonify(msg)
+
+
+
+@app.route('/login/',methods=['GET'])
+def login():
+    logs=[]
+    try:
+        username=request.form['username']
+        password=request.form['password']
+        with sqlite3.connect('database.db') as con:
+            cur=con.cursor()
+            adminT=("SELECT * FROM Admin WHERE username = ? and password = ?")
+            cur.execute(adminT,[(username),(password)])
+            cur = con.cursor()
+            con.row_factory=dict_factory
+            cur.fetchall()
+
+    except Exception as e:
+        con.rollback()
+        print("There was an error fetching results from the database: " + str(e))
+    finally:
+        con.close()
+        return jsonify(logs)
 '''-------------------------------------------------------------------------------------------'''
 @app.route('/show-records/', methods=["GET"])
 def show_records():
@@ -187,7 +206,7 @@ def edit_product(product_id):
 
 
 
-@app.route('/add-new-record/', methods=['POST'])
+"""@app.route('/add-new-record/', methods=['POST'])
 def add_new_record():
     if request.method == "POST":
         msg = None
@@ -207,7 +226,7 @@ def add_new_record():
         finally:
             con.close()
             return jsonify(msg)
-
+"""
 
 @app.route('/delete-item/<int:product_id>/', methods=["GET"])
 def delete_product(product_id):
