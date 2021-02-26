@@ -107,10 +107,6 @@ def login():
             cur = con.cursor()
             con.row_factory=dict_factory
             cur.fetchall()
-            for x in cur.fetchall():
-                if cur.execute(adminT,[(username),(password)]) in x:
-
-
     except Exception as e:
         con.rollback()
         print("There was an error fetching results from the database: " + str(e))
