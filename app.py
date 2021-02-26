@@ -67,8 +67,33 @@ def add_new_record():
         finally:
             con.close()
             return jsonify(msg)
-
-
+@app.route('/login/',method=["GET"])
+def check():
+    all_logs={"SELECT * FROM Admin WHERE username = ? and password = ?"}
+    myuser=request.form['username']
+    password=request.form['password']
+    if (myuser, password)in all_logs:
+        return ("HI")
+# def login():
+#     logs=[]
+#     try:
+#         username=request.form['username']
+#         password=request.form['password']
+#         with sqlite3.connect('database.db') as con:
+#             cur=con.cursor()
+#             adminT=("SELECT * FROM Admin WHERE username = ? and password = ?")
+#             cur.execute(adminT,[(username),(password)])
+#             cur = con.cursor()
+#             con.row_factory=dict_factory
+#             cur.fetchall()
+#
+#     except Exception as e:
+#         con.rollback()
+#         print("There was an error fetching results from the database: " + str(e))
+#     finally:
+#         con.close()
+#         return jsonify(logs)
+'''-------------------------------------------------------------------------------------------'''
 @app.route('/show-records/', methods=["GET"])
 def show_records():
     records = []
@@ -143,12 +168,12 @@ def show_records_table():
 
 @app.route('/edit-item/<int:product_id>/',methods=['GET'])
 def edit_product(product_id):
+
     # return render_template('edit.html')
-    # msg="Edited"
+    msg="Edited"
     try:
 
         with sqlite3.connect('database.db') as con:
-
             cur = con.cursor()
             cur.execute("UPDATE Items SET (product_name, price, brand, picture) VALUES (?, ?, ?, ?) WHERE id=" + str(product_id))
             con.commit()
@@ -158,7 +183,30 @@ def edit_product(product_id):
             msg = "Error occurred when editing an item in the database: " + str(e)
     finally:
             con.close()
-            return
+            return jsonify(msg)
+
+
+
+@app.route('/add-new-record/', methods=['POST'])
+def add_new_record():
+    if request.method == "POST":
+        msg = None
+        try:
+            product_name = request.form['product_name']
+            price = request.form['price']
+            brand = request.form['brand']
+            picture = request.form['picture']
+            with sqlite3.connect('database.db') as con:
+                cur = con.cursor()
+                cur.execute("INSERT INTO Items (product_name, price, brand, picture) VALUES (?, ?, ?, ?)", (product_name, price, brand, picture))
+                con.commit()
+                msg = product_name + " was successfully added to the database."
+        except Exception as e:
+            con.rollback()
+            msg = "Error occurred in insert operation: " + str(e)
+        finally:
+            con.close()
+            return jsonify(msg)
 
 
 @app.route('/delete-item/<int:product_id>/', methods=["GET"])
