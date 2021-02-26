@@ -2,24 +2,53 @@ import sqlite3
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 
+
 def dict_factory(cursor,row):
     d={}
     for idx,col in enumerate(cursor.description):
         d[col[0]]=row[idx]
     return d
+
+
 def init_sqlite_db():
     conn = sqlite3.connect('database.db')
     print("Opened database successfully")
     conn.execute('CREATE TABLE IF NOT EXISTS Items (id INTEGER PRIMARY KEY AUTOINCREMENT, product_name TEXT,price  TEXT, brand TEXT, picture BLOB)')
-    print("Table created successfully")
+    print(" Item Table created successfully")
+    #conn.execute('CREATE TABLE IF NOT EXISTS ADMIN (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT,password TEXT)')
+    #print("ADMIN Table created successfully")
     conn.close()
+
+
 init_sqlite_db()
+
+'''
+def add_admin():
+    # if request.method == "POST":
+    msg = None
+    try:
+
+        with sqlite3.connect('database.db') as con:
+            cur = con.cursor()
+            cur.execute("INSERT INTO ADMIN (username,password) VALUES ('admin', 'admin')", )
+            con.commit()
+            msg = " admin was successfully added to the database."
+    except Exception as e:
+        con.rollback()
+        msg = "Error occurred in insert operation: " + str(e)
+    finally:
+        con.close()
+        print(msg)
+'''
+
 app = Flask(__name__)
 CORS(app)
+
 
 @app.route('/')
 @app.route('/add-product/')
 def enter_new_student():
+    #add_admin()
     return render_template('new-product.html')
 
 
@@ -45,13 +74,6 @@ def add_new_record():
             return jsonify(msg)
 
 
-
-
-
-
-
-
-
 @app.route('/show-records/', methods=["GET"])
 def show_records():
     records = []
@@ -61,6 +83,30 @@ def show_records():
             con.row_factory=dict_factory
             cur = con.cursor()
             cur.execute("SELECT * FROM Items")
+            records = cur.fetchall()
+        ''' for row in records:
+                print(row)
+
+            for i in row:
+                print(i)
+            print((records))'''
+    except Exception as e:
+        con.rollback()
+        print("There was an error fetching results from the database: " + str(e))
+    finally:
+        con.close()
+        return jsonify(records)
+
+
+@app.route('/show-admin/', methods=["GET"])
+def show_admin():
+    records = []
+    try:
+
+        with sqlite3.connect('database.db') as con:
+            con.row_factory=dict_factory
+            cur = con.cursor()
+            cur.execute("SELECT * FROM ADMIN")
             records = cur.fetchall()
         ''' for row in records:
                 print(row)
@@ -98,7 +144,7 @@ def show_records_table():
         con.close()
         return
 
-'''
+
 
 @app.route('/edit-item/<int:product_id>/',methods=['GET'])
 def edit_product(product_id):
@@ -117,9 +163,9 @@ def edit_product(product_id):
             msg = "Error occurred when editing an item in the database: " + str(e)
     finally:
             con.close()
-            return render_template('delete-success.html', msg=msg)
+            return
 
-'''
+
 @app.route('/delete-item/<int:product_id>/', methods=["GET"])
 def delete_product(product_id):
 
