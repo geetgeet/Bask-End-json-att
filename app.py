@@ -46,11 +46,6 @@ CORS(app)
 
 
 @app.route('/')
-@app.route('/add-product/')
-def enter_new_student():
-    #add_admin()
-    return render_template('new-product.html')
-
 
 @app.route('/add-new-record/', methods=['POST'])
 def add_new_record():
