@@ -51,10 +51,11 @@ def add_new_record():
     if request.method == "POST":
         msg = None
         try:
-            product_name = request.form['product_name']
-            price = request.form['price']
-            brand = request.form['brand']
-            picture = request.form['picture']
+            post_data = request.get_json()
+            product_name = post_data['product_name']
+            price = post_data['price']
+            brand = post_data['brand']
+            picture = post_data['picture']
             with sqlite3.connect('database.db') as con:
                 cur = con.cursor()
                 cur.execute("INSERT INTO Items (product_name, price, brand, picture) VALUES (?, ?, ?, ?)", (product_name, price, brand, picture))
@@ -102,9 +103,13 @@ def login():
             cur=con.cursor()
             adminT=("SELECT * FROM Admin WHERE username = ? and password = ?")
             cur.execute(adminT,[(username),(password)])
+
             cur = con.cursor()
             con.row_factory=dict_factory
             cur.fetchall()
+            for x in cur.fetchall():
+                if cur.execute(adminT,[(username),(password)]) in x:
+
 
     except Exception as e:
         con.rollback()
