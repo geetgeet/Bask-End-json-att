@@ -246,6 +246,6 @@ def delete_product(product_id):
         msg = "Error occurred when deleting a student in the database: " + str(e)
     finally:
         con.close()
-        return render_template('delete-success.html', msg=msg)
+        return (msg)
 if __name__=="__main__":
     app.run(debug=True)
