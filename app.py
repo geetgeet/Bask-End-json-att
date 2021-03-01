@@ -106,6 +106,7 @@ def login():
             sql=("SELECT * FROM Admin WHERE username = ? and password = ?")
             cur.execute(sql,[username,password])
             records=cur.fetchall()
+            print(records)
 
 
     except Exception as e:
