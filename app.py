@@ -22,7 +22,7 @@ def init_sqlite_db():
 
 init_sqlite_db()
 
-'''
+
 def add_admin():
     # if request.method == "POST":
     msg = None
@@ -39,16 +39,18 @@ def add_admin():
     finally:
         con.close()
         print(msg)
-'''
+
 
 app = Flask(__name__)
 CORS(app)
 
 
 @app.route('/')
+
 @app.route('/add-new-record/', methods=['POST'])
 def add_new_record():
     if request.method == "POST":
+
         msg = None
         try:
             post_data = request.get_json()
@@ -93,26 +95,25 @@ def add_new_record():
 
 
 
-@app.route('/login/',methods=['GET'])
+@app.route('/login/',methods=['POST'])
 def login():
-    logs=[]
+    msg=None
     try:
         username=request.form['username']
         password=request.form['password']
         with sqlite3.connect('database.db') as con:
             cur=con.cursor()
-            adminT=("SELECT * FROM Admin WHERE username = ? and password = ?")
-            cur.execute(adminT,[(username),(password)])
+            sql=("SELECT * FROM Admin WHERE username = ? and password = ?")
+            cur.execute(sql,[username,password])
+            records=cur.fetchall()
 
-            cur = con.cursor()
-            con.row_factory=dict_factory
-            cur.fetchall()
+
     except Exception as e:
         con.rollback()
-        print("There was an error fetching results from the database: " + str(e))
+        msg=("There was an error fetching results from the database: " + str(e))
     finally:
         con.close()
-        return jsonify(logs)
+        return jsonify(records)
 '''-------------------------------------------------------------------------------------------'''
 @app.route('/show-records/', methods=["GET"])
 def show_records():
