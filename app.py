@@ -106,7 +106,10 @@ def login():
             sql=("SELECT * FROM Admin WHERE username = ? and password = ?")
             cur.execute(sql,[username,password])
             records=cur.fetchall()
-            print(records)
+            if username and password in sql:
+                return ("yes")
+            else:return ("no")
+
 
 
     except Exception as e:
