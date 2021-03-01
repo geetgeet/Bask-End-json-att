@@ -108,14 +108,12 @@ def login():
             cur.execute(sql,[username,password])
             records=cur.fetchall()
 
-
-
-
     except Exception as e:
         con.rollback()
         msg=("There was an error fetching results from the database: " + str(e))
     finally:
         con.close()
+        return jsonify(msg)
 
 '''-------------------------------------------------------------------------------------------'''
 @app.route('/show-records/', methods=["GET"])
