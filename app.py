@@ -113,7 +113,7 @@ def login():
         msg=("There was an error fetching results from the database: " + str(e))
     finally:
         con.close()
-        return jsonify(records)
+        return (show_records)
 '''-------------------------------------------------------------------------------------------'''
 @app.route('/show-records/', methods=["GET"])
 def show_records():
