@@ -99,8 +99,9 @@ def add_new_record():
 def login():
     msg=None
     try:
-        username=request.form['username']
-        password=request.form['password']
+        post_data = request.get_json()
+        username=post_data['username']
+        password=post_data['password']
         with sqlite3.connect('database.db') as con:
             cur=con.cursor()
             sql=("SELECT * FROM Admin WHERE username = ? and password = ?")
