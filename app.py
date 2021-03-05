@@ -188,24 +188,25 @@ def show_records_table():
 
 
 
-@app.route('/edit-item/<int:product_id>/',methods=['GET'])
+@app.route('/edit-item/<int:product_id>/',methods=['PUT'])
 def edit_product(product_id):
+    post_data = request.get_json()
+    records = {'id':product_id,
+               'product_name' : post_data['product_name'],
+               'price' :post_data['price'],
+                'brand' : post_data['brand'],
+               'picture' : post_data['picture']}
+    #Database
+    con =sqlite3.connect('database.db')
+    #cursor
+    cur = con.cursor()
+    sql= ("UPDATE Items SET product_name = ?, price = ?, brand = ?, picture = ?  WHERE id= ?")
+    cur.execute(sql,(records['product_name'],records['price'],records['brand'],records['picture'],records['id']))
 
-    # return render_template('edit.html')
-    msg="Edited"
-    try:
+    con.commit()
 
-        with sqlite3.connect('database.db') as con:
-            cur = con.cursor()
-            cur.execute("UPDATE Items SET (product_name, price, brand, picture) VALUES (?, ?, ?, ?) WHERE id=" + str(product_id))
-            con.commit()
-            msg = "A record was edited successfully from the database."
-    except Exception as e:
-            con.rollback()
-            msg = "Error occurred when editing an item in the database: " + str(e)
-    finally:
-            con.close()
-            return jsonify(msg)
+
+    return jsonify(records)
 
 
 
@@ -231,7 +232,7 @@ def add_new_record():
             return jsonify(msg)
 """
 
-@app.route('/delete-item/<int:product_id>/', methods=["GET"])
+@app.route('/delete-item/<int:product_id>/', methods=["DELETE"])
 def delete_product(product_id):
 
     msg = None
