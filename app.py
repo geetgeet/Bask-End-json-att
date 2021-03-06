@@ -207,8 +207,27 @@ def edit_product(product_id):
 
 
     return jsonify(records)
-
-
+# @app.route('/add-history/')
+# def addhistory():
+#
+# @app.route('/transact-hist/')
+# def showhistory():
+#     records = []
+#     try:
+#
+#         with sqlite3.connect('database.db') as con:
+#             con.row_factory=dict_factory
+#             cur = con.cursor()
+#             cur.execute("SELECT * FROM history")
+#             records = cur.fetchall()
+#
+#     except Exception as e:
+#         con.rollback()
+#         print("There was an error fetching results from the database: " + str(e))
+#     finally:
+#         con.close()
+#         return jsonify(records)
+#
 
 """@app.route('/add-new-record/', methods=['POST'])
 def add_new_record():
