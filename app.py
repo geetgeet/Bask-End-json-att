@@ -70,30 +70,6 @@ def add_new_record():
             con.close()
             return jsonify(msg)
 
-#
-# @app.route('/login/',methods=["GET"])
-# def login():
-#     if request.method == "GET":
-#
-#         msg=None
-#     try:
-#         myuser=request.form['username']
-#         password=request.form['password']
-#         with sqlite3.connect('database.db') as con:
-#             cur = con.cursor()
-#             all_logs=("SELECT * FROM Admin WHERE username = ? and password = ?")
-#             cur.execute(all_logs,(myuser,password))
-#             cur.fetchall()
-#             con.commit()
-#             msg="logged in"
-#     except Exception as e:
-#         con.rollback()
-#         msg= "Error occurred in insert operation: " + str(e)
-#     finally:
-#         con.close()
-#         return jsonify(msg)
-
-
 
 @app.route('/login/',methods=['POST'])
 def login():
@@ -163,29 +139,6 @@ def show_admin():
         con.close()
         return jsonify(records)
 
-@app.route('/show-records-table/', methods=["GET"])
-def show_records_table():
-    records = []
-    try:
-
-        with sqlite3.connect('database.db') as con:
-            con.row_factory=dict_factory
-            cur = con.cursor()
-            cur.execute("SELECT * FROM Items")
-            records = cur.fetchall()
-        ''' for row in records:
-                print(row)
-
-            for i in row:
-                print(i)
-            print((records))'''
-    except Exception as e:
-        con.rollback()
-        print("There was an error fetching results from the database: " + str(e))
-    finally:
-        con.close()
-        return
-
 
 
 @app.route('/edit-item/<int:product_id>/',methods=['PUT'])
@@ -207,49 +160,7 @@ def edit_product(product_id):
 
 
     return jsonify(records)
-# @app.route('/add-history/')
-# def addhistory():
-#
-# @app.route('/transact-hist/')
-# def showhistory():
-#     records = []
-#     try:
-#
-#         with sqlite3.connect('database.db') as con:
-#             con.row_factory=dict_factory
-#             cur = con.cursor()
-#             cur.execute("SELECT * FROM history")
-#             records = cur.fetchall()
-#
-#     except Exception as e:
-#         con.rollback()
-#         print("There was an error fetching results from the database: " + str(e))
-#     finally:
-#         con.close()
-#         return jsonify(records)
-#
 
-"""@app.route('/add-new-record/', methods=['POST'])
-def add_new_record():
-    if request.method == "POST":
-        msg = None
-        try:
-            product_name = request.form['product_name']
-            price = request.form['price']
-            brand = request.form['brand']
-            picture = request.form['picture']
-            with sqlite3.connect('database.db') as con:
-                cur = con.cursor()
-                cur.execute("INSERT INTO Items (product_name, price, brand, picture) VALUES (?, ?, ?, ?)", (product_name, price, brand, picture))
-                con.commit()
-                msg = product_name + " was successfully added to the database."
-        except Exception as e:
-            con.rollback()
-            msg = "Error occurred in insert operation: " + str(e)
-        finally:
-            con.close()
-            return jsonify(msg)
-"""
 
 @app.route('/delete-item/<int:product_id>/', methods=["DELETE"])
 def delete_product(product_id):
@@ -267,5 +178,31 @@ def delete_product(product_id):
     finally:
         con.close()
         return (msg)
+
+# @app.route('/search/show-records/',methods=['POST'])
+# def searchItem():
+#     if request.method == "POST":
+#
+#         try:
+#             post_data = request.get_json()
+#             product_name=post_data['search']
+#             with sqlite3.connect('database.db') as con:
+#                 con.row_factory=dict_factory
+#                 #Database
+#                 cur =con.cursor()
+#                 #cursor
+#                 cur.execute("SELECT * FROM Items WHERE product_name= ?",
+#                         (product_name))
+#                 data=cur.fetchall()
+#
+#         except Exception as e:
+#             print("sum not right",str(e))
+#
+#         finally:
+#             con.close()
+#             return jsonify(data)
+#
+
+
 if __name__=="__main__":
     app.run(debug=True)
