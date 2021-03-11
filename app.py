@@ -46,6 +46,11 @@ CORS(app)
 
 
 @app.route('/')
+def land():
+    land=""
+    return ("Add /show-records/ to url to view json records, \n Netlify link :https://admiring-minsky-04b5fe.netlify.app/index.html")
+
+
 
 @app.route('/add-new-record/', methods=['POST'])
 def add_new_record():
