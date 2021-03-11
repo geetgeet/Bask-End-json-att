@@ -48,7 +48,7 @@ CORS(app)
 @app.route('/')
 def land():
     land=""
-    return ("Add /show-records/ to url to view json records, \n Netlify link :https://admiring-minsky-04b5fe.netlify.app/index.html")
+    return ("<p>Add /show-records/ to url to view json records</p><p>\n Netlify link :https://admiring-minsky-04b5fe.netlify.app/index.html</p>")
 
 
 
