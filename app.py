@@ -13,7 +13,7 @@ def dict_factory(cursor,row):
 def init_sqlite_db():
     conn = sqlite3.connect('database.db')
     print("Opened database successfully")
-    conn.execute('CREATE TABLE IF NOT EXISTS Items (id INTEGER PRIMARY KEY AUTOINCREMENT, product_name TEXT,price  TEXT, brand TEXT, picture BLOB)')
+    conn.execute('CREATE TABLE IF NOT EXISTS Items (id INTEGER PRIMARY KEY AUTOINCREMENT, product_name TEXT,price  TEXT, brand TEXT, picture BLOB, stock INT)')
     print(" Item Table created successfully")
     #conn.execute('CREATE TABLE IF NOT EXISTS ADMIN (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT,password TEXT)')
     #print("ADMIN Table created successfully")
@@ -63,9 +63,10 @@ def add_new_record():
             price = post_data['price']
             brand = post_data['brand']
             picture = post_data['picture']
+            stock = post_data['stock']
             with sqlite3.connect('database.db') as con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO Items (product_name, price, brand, picture) VALUES (?, ?, ?, ?)", (product_name, price, brand, picture))
+                cur.execute("INSERT INTO Items (product_name, price, brand, picture,stock) VALUES (?, ?, ?, ?,?)", (product_name, price, brand, picture, stock))
                 con.commit()
                 msg = product_name + " was successfully added to the database."
         except Exception as e:
@@ -153,13 +154,14 @@ def edit_product(product_id):
                'product_name' : post_data['product_name'],
                'price' :post_data['price'],
                 'brand' : post_data['brand'],
-               'picture' : post_data['picture']}
+               'picture' : post_data['picture'],
+               'stock': post_data['stock']}
     #Database
     con =sqlite3.connect('database.db')
     #cursor
     cur = con.cursor()
-    sql= ("UPDATE Items SET product_name = ?, price = ?, brand = ?, picture = ?  WHERE id= ?")
-    cur.execute(sql,(records['product_name'],records['price'],records['brand'],records['picture'],records['id']))
+    sql= ("UPDATE Items SET product_name = ?, price = ?, brand = ?, picture = ?, stock = ?  WHERE id= ?")
+    cur.execute(sql,(records['product_name'],records['price'],records['brand'],records['picture'],records['stock'],records['id']))
 
     con.commit()
 
