@@ -19,9 +19,7 @@ def init_sqlite_db():
     #print("ADMIN Table created successfully")
     conn.close()
     conn.execute('ALTER TABLE Items ADD stock INT DEFAULT 0)')
-
-
-
+    conn.close()
 init_sqlite_db()
 
 
