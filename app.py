@@ -69,10 +69,10 @@ def add_new_record():
             price = post_data['price']
             brand = post_data['brand']
             picture = post_data['picture']
-            stock = post_data['stock']
+            stocks = post_data['stocks']
             with sqlite3.connect('database.db') as con:
                 cur = con.cursor()
-                cur.execute("INSERT INTO Items (product_name, price, brand, picture,stock) VALUES (?, ?, ?, ?,?)", (product_name, price, brand, picture, stock))
+                cur.execute("INSERT INTO Items (product_name, price, brand, picture,stocks) VALUES (?, ?, ?, ?,?)", (product_name, price, brand, picture, stocks))
                 con.commit()
                 msg = product_name + " was successfully added to the database."
         except Exception as e:
@@ -161,13 +161,13 @@ def edit_product(product_id):
                'price' :post_data['price'],
                 'brand' : post_data['brand'],
                'picture' : post_data['picture'],
-               'stock': post_data['stock']}
+               'stocks': post_data['stocks']}
     #Database
     con =sqlite3.connect('database.db')
     #cursor
     cur = con.cursor()
-    sql= ("UPDATE Items SET product_name = ?, price = ?, brand = ?, picture = ?, stock = ?  WHERE id= ?")
-    cur.execute(sql,(records['product_name'],records['price'],records['brand'],records['picture'],records['stock'],records['id']))
+    sql= ("UPDATE Items SET product_name = ?, price = ?, brand = ?, picture = ?, stocks = ?  WHERE id= ?")
+    cur.execute(sql,(records['product_name'],records['price'],records['brand'],records['picture'],records['stocks'],records['id']))
 
     con.commit()
 
