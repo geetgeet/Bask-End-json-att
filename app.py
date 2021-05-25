@@ -13,7 +13,7 @@ def dict_factory(cursor,row):
 def init_sqlite_db():
     conn = sqlite3.connect('database.db')
     print("Opened database successfully")
-    conn.execute('CREATE TABLE IF NOT EXISTS Items (id INTEGER PRIMARY KEY AUTOINCREMENT, product_name TEXT,price  TEXT, brand TEXT, picture BLOB, stock INT)')
+    conn.execute('CREATE TABLE IF NOT EXISTS Items (id INTEGER PRIMARY KEY AUTOINCREMENT, product_name TEXT,price  TEXT, brand TEXT, picture BLOB, stock INT DEFAULT 0)')
     print(" Item Table created successfully")
     conn.execute('CREATE TABLE IF NOT EXISTS ADMIN (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT,password TEXT)')
     #print("ADMIN Table created successfully")
