@@ -17,9 +17,9 @@ def init_sqlite_db():
     print(" Item Table created successfully")
     conn.execute('CREATE TABLE IF NOT EXISTS ADMIN (id INTEGER PRIMARY KEY AUTOINCREMENT, username TEXT,password TEXT)')
     #print("ADMIN Table created successfully")
-    conn.execute('ALTER TABLE Items DROP COLUMN stock')
-    # conn.execute('ALTER TABLE Items ADD stock INT DEFAULT 0')
-    # print("  Stock col added")
+    # conn.execute('ALTER TABLE Items DROP COLUMN stock')
+    conn.execute('ALTER TABLE Items ADD stock INT DEFAULT 0')
+    print("Stock col added")
     conn.close
 
 
