@@ -1,3 +1,4 @@
 .database copy/
 database2.db/
 .database2
+log.py
